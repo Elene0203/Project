@@ -17,7 +17,8 @@ export default function Setting({navigation}) {
             <Text style={styles.body_text}>{user.email}</Text>
           </View>
         </View>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Change Password')}>
           <Text style={[{color: '#92C2DD'}, styles.body_text]}>
             Change Password
           </Text>

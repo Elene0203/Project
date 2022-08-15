@@ -1,31 +1,39 @@
 import React, {useState} from 'react';
-import {Button, View} from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Text, TouchableOpacity, View} from 'react-native';
+import DatePicker from 'react-native-date-picker';
 
 export const TimePick = () => {
-  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-
-  const showTimePicker = () => {
-    setTimePickerVisibility(true);
-  };
-
-  const hideTimePicker = () => {
-    setTimePickerVisibility(false);
-  };
-
-  const handleConfirm = time => {
-    console.warn('A date has been picked: ', time);
-    hideTimePicker();
-  };
-
+  const [time, setTime] = useState(null);
+  const [open, setOpen] = useState(false);
   return (
     <View>
-      <Button title="Select time" onPress={showTimePicker} />
-      <DateTimePickerModal
-        isVisible={isTimePickerVisible}
+      <TouchableOpacity onPress={() => setOpen(true)}>
+        <Text
+          style={{
+            fontSize: 18,
+            color: 'grey',
+            borderBottomColor: 'black',
+            borderBottomWidth: 1,
+            width: 250,
+            paddingLeft: 10,
+          }}>
+          {time != null
+            ? time.getHours() + ':' + time.getMinutes()
+            : 'Select time'}
+        </Text>
+      </TouchableOpacity>
+      <DatePicker
+        modal
+        open={open}
+        date={time || new Date()}
         mode="time"
-        onConfirm={handleConfirm}
-        onCancel={hideTimePicker}
+        onConfirm={date => {
+          setOpen(false);
+          setTime(date);
+        }}
+        onCancel={() => {
+          setOpen(false);
+        }}
       />
     </View>
   );

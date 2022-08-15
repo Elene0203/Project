@@ -9,6 +9,8 @@ import Setting from '../screens/Setting';
 import Login from '../screens/Login';
 import SignUp from '../screens/SignUp';
 import BottomTab from './BottomTab';
+import FinishGoal from '../screens/FinishGoal';
+import ChangePassword from '../screens/ChangePassword';
 
 const Stack = createStackNavigator();
 
@@ -33,9 +35,20 @@ const HomeScreenNavigator = () => {
         name="Add Goal"
         component={AddGoal}
         options={{
-          headerTintColor: 'white',
+          headerTintColor: 'black',
           headerBackTitleVisible: false,
         }}
+      />
+      <Stack.Screen
+        name="Goal"
+        component={FinishGoal}
+        options={
+          ({
+            headerTintColor: 'black',
+            headerBackTitleVisible: false,
+          },
+          ({route}) => ({title: route.params.name}))
+        }
       />
     </Stack.Navigator>
   );
@@ -63,9 +76,20 @@ const HistoryScreenNavigator = () => {
         name="Images"
         component={Images}
         options={{
-          headerTintColor: 'white',
+          headerTintColor: 'black',
           headerBackTitleVisible: false,
         }}
+      />
+      <Stack.Screen
+        name="Goal"
+        component={FinishGoal}
+        options={
+          ({
+            headerTintColor: 'black',
+            headerBackTitleVisible: false,
+          },
+          ({route}) => ({title: route.params.name}))
+        }
       />
     </Stack.Navigator>
   );
@@ -84,9 +108,12 @@ const InsightScreenNavigator = () => {
           color: 'black',
         },
         headerTitleAlign: 'center',
-        headerLeft: props => null,
       }}>
-      <Stack.Screen name="Insights" component={Insights} />
+      <Stack.Screen
+        name="Insights"
+        component={Insights}
+        options={{headerLeft: props => null}}
+      />
     </Stack.Navigator>
   );
 };
@@ -104,9 +131,19 @@ const SettingScreenNavigator = () => {
           color: 'black',
         },
         headerTitleAlign: 'center',
-        headerLeft: props => null,
       }}>
-      <Stack.Screen name="Setting" component={Setting} />
+      <Stack.Screen
+        name="Setting"
+        component={Setting}
+        options={{headerLeft: props => null}}
+      />
+      <Stack.Screen
+        name="Change Password"
+        component={ChangePassword}
+        options={{
+          headerTintColor: 'black',
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -121,7 +158,7 @@ const SignScreenNavigator = () => {
       }}>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="Home" component={BottomTab}/>
+      <Stack.Screen name="Home" component={BottomTab} />
     </Stack.Navigator>
   );
 };
