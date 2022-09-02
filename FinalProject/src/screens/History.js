@@ -5,7 +5,6 @@ import {
   Text,
   Button,
   TouchableOpacity,
-  ImageBackground,
   FlatList,
   Image,
 } from 'react-native';
@@ -37,7 +36,7 @@ export default function History({navigation}) {
   const viewAllGoals = () => {
     db.transaction(tx => {
       tx.executeSql(
-        'SELECT * FROM goals WHERE user_id=? AND goal_status =? ORDER BY goal_date, finish_time',
+        'SELECT * FROM goals WHERE user_id=? AND goal_status =? ORDER BY goal_date DESC, finish_time',
         [user.user_id, 1],
         (tx, results) => {
           const temp = [];

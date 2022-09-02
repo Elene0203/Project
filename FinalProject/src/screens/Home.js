@@ -8,6 +8,7 @@ import {
   FlatList,
   ImageBackground,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 import storage from '../utils/Storage';
@@ -36,10 +37,10 @@ export default function Home({navigation}) {
   const [encourageImage, setEncourageImage] = useState('');
 
   const date = TodayDate();
+  const alerted = {};
 
   const addDefaultGoals = list => {
     const num = parseInt(Math.random() * 30);
-    console.log(num);
     db.transaction(function (tx) {
       for (let i = 0; i < list.length; ++i) {
         tx.executeSql(
@@ -47,7 +48,6 @@ export default function Home({navigation}) {
           [list[i].goal_name, date, list[i].estimateTime, 0, num, user.user_id],
           (tx, results) => {
             console.log('Results', results.rowsAffected);
-            console.log('image==', num);
             if (results.rowsAffected > 0) {
               console.log('goals added Successfully');
             } else {
@@ -65,7 +65,7 @@ export default function Home({navigation}) {
   const viewAllGoals = () => {
     db.transaction(tx => {
       tx.executeSql(
-        'SELECT * FROM goals WHERE goal_date=? and user_id=?',
+        'SELECT * FROM goals WHERE goal_date=? and user_id=? ORDER BY goal_status, finish_time, estimate_time',
         [date, user.user_id],
         (tx, results) => {
           const temp = [];
@@ -83,9 +83,50 @@ export default function Home({navigation}) {
     });
   };
 
+  const intervalDeal = () => {
+    setInterval(() => {
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT * FROM goals WHERE goal_status=? and goal_date=? and user_id=?',
+          [0, date, user.user_id],
+          (tx, results) => {
+            for (let i = 0; i < results.rows.length; ++i) {
+              let item = results.rows.item(i);
+              const time = date + ' ' + item.estimate_time;
+              let seconds = new Date(time).getTime() - new Date().getTime();
+              if (
+                !alerted[item.id] &&
+                seconds < 30 * 60 * 1000 &&
+                seconds > 29 * 60 * 1000
+              ) {
+                console.log(seconds);
+                Alert.alert(
+                  'Notification',
+                  'The goal' +
+                    item.goal_name +
+                    ' need to be finished 30min later',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => navigation.navigate('Home'),
+                    },
+                  ],
+                  {cancelable: false},
+                );
+                alerted[item.id] = true;
+              }
+            }
+          },
+        );
+      });
+    }, 8000);
+  };
+
   useEffect(() => {
     GetEncouragement();
     EncourageImage();
+    intervalDeal();
+
     if (!date) {
       return;
     }
@@ -155,6 +196,7 @@ export default function Home({navigation}) {
               GoalID: item.goal_id,
               GoalName: item.goal_name,
               GoalStatus: item.goal_status,
+              EstimateTime: item.estimate_time,
             })
           }>
           <ImageBackground
@@ -170,6 +212,14 @@ export default function Home({navigation}) {
               fontSize: 14,
               alignSelf: 'center',
             }}>
+            {item.goal_status != 1 ? item.estimate_time : item.finish_time}
+          </Text>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 14,
+              alignSelf: 'center',
+            }}>
             {item.goal_name}
           </Text>
         </TouchableOpacity>
@@ -178,7 +228,7 @@ export default function Home({navigation}) {
   };
 
   const GetEncouragement = () => {
-    fetch('http://10.0.2.2:5000/encouragement')
+    fetch('http://51.104.224.1:5000/encouragement')
       .then(response => response.json())
       .then(responseJson => {
         setEncouragement(responseJson[0].content);
@@ -248,7 +298,7 @@ const styles = StyleSheet.create({
   },
   completion: {
     backgroundColor: '#F9F9F9',
-    flex: 0.1,
+    flex: 0.12,
     marginTop: 10,
     borderRadius: 10,
     width: '90%',
@@ -272,6 +322,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 5,
     fontWeight: 'bold',
+    marginBottom: 5,
   },
   dailyGoals: {
     alignSelf: 'center',
@@ -307,6 +358,6 @@ const styles = StyleSheet.create({
   },
   encouragement_text: {
     marginTop: 20,
-    fontSize: 14,
+    fontSize: 16,
   },
 });

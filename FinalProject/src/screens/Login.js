@@ -48,7 +48,7 @@ export default function Login({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Back</Text>
+      <Text style={styles.title}>Welcome !</Text>
       <Text style={styles.text}>Email:</Text>
       <TextInput
         placeholder="Your email address"

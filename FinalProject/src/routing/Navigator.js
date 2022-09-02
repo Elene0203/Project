@@ -133,7 +133,7 @@ const SettingScreenNavigator = () => {
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen
-        name="Setting"
+        name="Account"
         component={Setting}
         options={{headerLeft: props => null}}
       />

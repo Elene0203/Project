@@ -25,7 +25,7 @@ export default function AddGoal({navigation}) {
   const [time, setTime] = useState(null);
   const [open, setOpen] = useState(false);
   let hours =
-    time != null ? (time.getHours() < 10 ? '0' : '') + time.getMinutes() : 0;
+    time != null ? (time.getHours() < 10 ? '0' : '') + time.getHours() : 0;
   let minutes =
     time != null ? (time.getMinutes() < 10 ? '0' : '') + time.getMinutes() : 0;
   const [GoalImage, setGoalImage] = useState('');

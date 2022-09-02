@@ -47,7 +47,7 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name="Account"
+        name="Account2"
         component={SettingScreenNavigator}
         options={{
           tabBarLabel: 'Account',

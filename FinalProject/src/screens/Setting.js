@@ -7,25 +7,26 @@ export default function Setting({navigation}) {
   const user = storage.user;
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Account</Text>
       <View style={styles.body}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: 0.4}}>
-            <Text style={styles.body_text}> Email: </Text>
-          </View>
-          <View style={{flex: 0.4}}>
-            <Text style={styles.body_text}>{user.email}</Text>
-          </View>
-        </View>
+        <Text style={styles.body_text}>
+          {' '}
+          Email: <Text style={styles.input}>{user.email}</Text>
+        </Text>
+
         <TouchableOpacity
+          style={[{borderWidth: 1, borderColor: '#92C2DD'}, styles.button]}
           onPress={() => navigation.navigate('Change Password')}>
-          <Text style={[{color: '#92C2DD'}, styles.body_text]}>
+          <Text style={[{color: '#92C2DD'}, styles.button_text]}>
             Change Password
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text
-            style={[{color: '#92C2DD', marginBottom: 20}, styles.body_text]}>
+        <TouchableOpacity
+          style={[
+            {borderWidth: 1, borderColor: '#92C2DD', marginBottom: 10},
+            styles.button,
+          ]}
+          onPress={() => navigation.navigate('Login')}>
+          <Text style={[{color: '#92C2DD'}, styles.button_text]}>
             <Ionicons name="log-out-outline" color="#92C2DD" size={24} />
             Sign Out
           </Text>
@@ -53,8 +54,28 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   body_text: {
-    fontSize: 18,
-    marginTop: 10,
+    fontSize: 20,
+    marginTop: 20,
+    color: 'black',
+    marginLeft: 40,
+    borderBottomWidth: 1,
+    width: '80%',
+  },
+  input: {
+    fontSize: 20,
+    padding: 10,
     alignSelf: 'center',
+    marginTop: 5,
+  },
+  button: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    padding: 8,
+    borderRadius: 20,
+    marginTop: 20,
+  },
+  button_text: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });

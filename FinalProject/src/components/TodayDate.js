@@ -5,7 +5,15 @@ const TodayDate = () => {
   let month = new Date().getMonth() + 1;
   let year = new Date().getFullYear();
 
-  return year + '/' + month + '/' + date; //format:yyyy/mm/dd;
+  return (
+    year +
+    '/' +
+    (month < 10 ? '0' : '') +
+    month +
+    '/' +
+    (date < 10 ? '0' : '') +
+    date
+  ); //format:yyyy/mm/dd;
 };
 
 export default TodayDate;

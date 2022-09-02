@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import storage from '../utils/Storage';
 import {openDatabase} from 'react-native-sqlite-storage';
@@ -40,7 +41,10 @@ export default function ChangePassword({navigation}) {
       alert('Your new password and confirmation password do not match.');
       return;
     }
-    console.log(newPassword);
+    if (newPassword === user.password) {
+      alert('New password is same as previous one');
+      return;
+    }
     db.transaction(function (tx) {
       tx.executeSql(
         'UPDATE user SET password=? WHERE user_id=?',
@@ -48,7 +52,20 @@ export default function ChangePassword({navigation}) {
         (tx, results) => {
           console.log('Password Changed');
           if (results.rowsAffected > 0) {
-            navigation.goBack();
+            Alert.alert(
+              'Success',
+              'Password was changed.',
+              [
+                {
+                  text: 'Ok',
+                  onPress: () => navigation.navigate('Login'),
+                },
+              ],
+              {cancelable: false},
+            );
+            setConfirmPassword('');
+            setCurrentPassword('');
+            setNewPassword('');
           } else {
             alert('Failed to change password');
           }

@@ -21,7 +21,7 @@ const db = openDatabase({name: 'appData.db', createFromLocation: 1});
 export default function FinishGoal({route, navigation}) {
   const user = storage.user;
   const date = TodayDate();
-  const {GoalID, GoalName, GoalStatus} = route.params;
+  const {GoalID, GoalName, GoalStatus, EstimateTime} = route.params;
   const [comments, setComments] = useState('');
   const [startTime, setStartTime] = useState(null);
   const [goalTime, setGoalTime] = useState(null);
@@ -41,7 +41,7 @@ export default function FinishGoal({route, navigation}) {
     let titleFront = '';
     GoalStatus != 1
       ? (titleFront = 'New ')
-      : ((titleFront = 'Edit '), ViewGoalDetails());
+      : ((titleFront = 'Update '), ViewGoalDetails());
     navigation.setOptions({
       title: titleFront + JSON.stringify(GoalName).replace(/^\"|\"$/g, ''),
     });
@@ -58,15 +58,15 @@ export default function FinishGoal({route, navigation}) {
         value={duration}
         onValueChange={(value, index) => setDuration(value)}
         items={[
-          {label: '15 min', value: '15 min'},
-          {label: '30 min', value: '30 min'},
-          {label: '45 min', value: '45 min'},
-          {label: '1 hr', value: '1 hr'},
-          {label: '1 hr 15 min', value: '1 hr15 min'},
-          {label: '1 hr 30 min', value: '1 hr 30min'},
-          {label: '1 hr 45 min', value: '1 hr 45min'},
-          {label: '2 hr', value: '2 hr'},
-          {label: '2 hr+', value: '2 hr+'},
+          {label: '15min', value: '15min'},
+          {label: '30min', value: '30min'},
+          {label: '45min', value: '45min'},
+          {label: '1hr', value: '1hr'},
+          {label: '1hr 15min', value: '1hr 15min'},
+          {label: '1hr 30min', value: '1hr 30min'},
+          {label: '1hr 45min', value: '1hr 45min'},
+          {label: '2hr', value: '2hr'},
+          {label: '2hr+', value: '2hr+'},
         ]}
       />
     );
@@ -107,7 +107,7 @@ export default function FinishGoal({route, navigation}) {
               hours + ':' + minutes
             ) : GoalStatus != 1 ? (
               <Text style={{color: '#D3D3D3', fontSize: 16}}>
-                Select time...
+                {EstimateTime}
               </Text>
             ) : (
               <Text style={{color: 'black', fontSize: 16}}>{goalTime}</Text>
@@ -119,6 +119,7 @@ export default function FinishGoal({route, navigation}) {
           open={open}
           date={startTime || new Date()}
           mode="time"
+          is24hourSource="locale"
           onConfirm={date => {
             setOpen(false);
             setStartTime(date);
@@ -137,8 +138,6 @@ export default function FinishGoal({route, navigation}) {
         'SELECT * FROM goals WHERE goal_id=?',
         [GoalID],
         (tx, results) => {
-          console.log('goals-insit-.length===', results.rows.length);
-          console.log(results.rows.item(0));
           setDuration(results.rows.item(0).duration);
           setMood(results.rows.item(0).mood);
           setGoalTime(results.rows.item(0).finish_time);
@@ -245,7 +244,7 @@ export default function FinishGoal({route, navigation}) {
         style={[{backgroundColor: '#92C2DD'}, styles.button]}
         onPress={SaveGoal}>
         <Text style={[{color: 'white'}, styles.button_text]}>
-          {GoalStatus != 1 ? 'Save' : 'Edit'}
+          {GoalStatus != 1 ? 'Save' : 'Update'}
         </Text>
       </TouchableOpacity>
     </ScrollView>

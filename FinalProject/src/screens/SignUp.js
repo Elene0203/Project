@@ -94,9 +94,9 @@ export default function SignUp({navigation}) {
         style={styles.input}
       />
       <TouchableOpacity
-        style={[{borderWidth: 1, borderColor: '#92C2DD'}, styles.button]}
+        style={[{backgroundColor: '#92C2DD'}, styles.button]}
         onPress={addUser}>
-        <Text style={[{color: '#92C2DD'}, styles.button_text]}>Sign Up</Text>
+        <Text style={[{color: 'white'}, styles.button_text]}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -105,18 +105,19 @@ export default function SignUp({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
   title: {
     fontSize: 42,
     fontWeight: 'bold',
     color: '#92C2DD',
     marginBottom: 50,
+    marginTop: 80,
     alignSelf: 'center',
   },
   back: {
-    marginLeft: 20,
-    marginBottom: 10,
+    marginLeft: 10,
+    marginTop: 20,
   },
   text: {
     fontSize: 22,
