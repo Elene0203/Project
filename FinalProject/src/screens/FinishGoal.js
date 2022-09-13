@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -17,10 +18,13 @@ import TodayDate from '../components/TodayDate';
 
 // Connection to access the pre-populated user_db.db
 const db = openDatabase({name: 'appData.db', createFromLocation: 1});
+const {width, height} = Dimensions.get('window');
+// let inputWidth = width;
 
 export default function FinishGoal({route, navigation}) {
   const user = storage.user;
   const date = TodayDate();
+
   const {GoalID, GoalName, GoalStatus, EstimateTime} = route.params;
   const [comments, setComments] = useState('');
   const [startTime, setStartTime] = useState(null);
@@ -106,9 +110,7 @@ export default function FinishGoal({route, navigation}) {
             {startTime != null ? (
               hours + ':' + minutes
             ) : GoalStatus != 1 ? (
-              <Text style={{color: '#D3D3D3', fontSize: 16}}>
-                {EstimateTime}
-              </Text>
+              <Text style={{color: 'black', fontSize: 16}}>{EstimateTime}</Text>
             ) : (
               <Text style={{color: 'black', fontSize: 16}}>{goalTime}</Text>
             )}
@@ -119,7 +121,7 @@ export default function FinishGoal({route, navigation}) {
           open={open}
           date={startTime || new Date()}
           mode="time"
-          is24hourSource="locale"
+          is24Format={true}
           onConfirm={date => {
             setOpen(false);
             setStartTime(date);
@@ -148,12 +150,6 @@ export default function FinishGoal({route, navigation}) {
   };
 
   const SaveGoal = () => {
-    if (GoalStatus === 0) {
-      if (!startTime) {
-        alert('Please select the time!');
-        return;
-      }
-    }
     if (!duration) {
       alert('Please select duration!');
       return;
@@ -166,12 +162,25 @@ export default function FinishGoal({route, navigation}) {
       alert('Please enter the comments!');
       return;
     }
-    console.log(hours + ':' + minutes, duration, mood, comments);
+    console.log(
+      startTime != null
+        ? hours + ':' + minutes
+        : GoalStatus != 1
+        ? EstimateTime
+        : goalTime,
+      duration,
+      mood,
+      comments,
+    );
     db.transaction(function (tx) {
       tx.executeSql(
         'UPDATE goals SET finish_time=?,goal_status=?,duration=?,mood=?,comments=? WHERE user_id=? AND goal_date=? AND goal_name=?',
         [
-          hours + ':' + minutes,
+          startTime != null
+            ? hours + ':' + minutes
+            : GoalStatus != 1
+            ? EstimateTime
+            : goalTime,
           1,
           duration,
           mood,
@@ -284,7 +293,7 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 10,
-    width: 380,
+    width: width - 10,
     marginTop: 10,
     alignSelf: 'center',
   },
@@ -293,7 +302,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     borderColor: 'grey',
     borderWidth: 1,
-    width: 380,
+    width: width - 10,
     height: 120,
     marginTop: 10,
     borderRadius: 10,

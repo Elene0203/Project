@@ -4,11 +4,12 @@ import {openDatabase} from 'react-native-sqlite-storage';
 import {BarChart} from 'react-native-charts-wrapper';
 import moment from 'moment';
 import {useIsFocused} from '@react-navigation/native';
-
+import storage from '../utils/Storage';
 // Connection to access the pre-populated user_db.db
 const db = openDatabase({name: 'appData.db', createFromLocation: 1});
 
 export default function Insights() {
+  const user = storage.user;
   const tabs = ['Day', 'Week', 'Month', 'Year'];
   const isFocused = useIsFocused();
   const [tab, setTab] = useState('Day');
@@ -38,11 +39,11 @@ export default function Insights() {
     db.transaction(tx => {
       let sql =
         cate == 'Day'
-          ? "SELECT * FROM goals where goal_status=1 and goal_date='" +
+          ? "SELECT * FROM goals where user_id =? AND goal_status=1 and goal_date='" +
             moment().format('YYYY/MM/DD') +
             "'"
-          : 'SELECT * FROM goals where goal_status=1';
-      tx.executeSql(sql, [], (tx, results) => {
+          : 'SELECT * FROM goals where user_id =? AND goal_status=1';
+      tx.executeSql(sql, [user.user_id], (tx, results) => {
         const temp = [];
         const values = xs.map(item => {
           return {
@@ -50,12 +51,10 @@ export default function Insights() {
           };
         });
 
-        console.log('values2222', xs, values);
         for (let i = 0; i < results.rows.length; ++i) {
           let item = results.rows.item(i);
 
-          const finish_time = item.finish_time;
-          let index = dates.findIndex((date, i) => {
+          let index = dates.findIndex(date => {
             if (cate == 'Day') {
               if (
                 moment(
@@ -80,7 +79,7 @@ export default function Insights() {
               );
             }
           });
-
+          console.log(index);
           if (index !== -1) {
             values[index].y++;
           }
@@ -107,6 +106,7 @@ export default function Insights() {
             barWidth: 0.6,
           },
         });
+        console.log(values);
       });
     });
   };
@@ -115,7 +115,7 @@ export default function Insights() {
     let now = moment();
     let xs = [];
     let dates = [];
-    setTitle('Insights into number of goals finished');
+    setTitle('Number of goals finished');
     if (item === 'Day') {
       dates.push(moment(now.format('YYYY/MM/DD') + ' 00:00:00'));
       for (let i = 0; i <= 8; i++) {
@@ -146,7 +146,6 @@ export default function Insights() {
       }
     }
 
-    console.log('xs', xs);
     setXAxis({
       valueFormatter: xs,
       granularityEnabled: true,
@@ -232,6 +231,7 @@ export default function Insights() {
           maxSizePercent: 1,
         }}
         style={{height: 400}}
+        chartDescription={{text: ''}}
         data={option}
       />
     </View>

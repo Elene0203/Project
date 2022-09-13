@@ -4535,7 +4535,7 @@ js-yaml@^3.13.1:
 
 jsc-android@^250230.2.1:
   version "250230.2.1"
-  resolved "https://registry.npmjs.org/jsc-android/-/jsc-android-250230.2.1.tgz"
+  resolved "https://registry.yarnpkg.com/jsc-android/-/jsc-android-250230.2.1.tgz#3790313a970586a03ab0ad47defbc84df54f1b83"
   integrity sha512-KmxeBlRjwoqCnBBKGsihFtvsBHyUFlBxJPK4FzeYcIuBfdjv6jFys44JITAgSTbQD+vIdwMEfyZklsuQX0yI1Q==
 
 jscodeshift@^0.13.1:

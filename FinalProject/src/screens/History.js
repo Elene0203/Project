@@ -16,6 +16,7 @@ import {ListenMusicImage_urls} from '../components/ImageRoutes/ListeningMusicIma
 import {CustomizedImage_urls} from '../components/ImageRoutes/CustomizedImage';
 import {PhoneImage_urls} from '../components/ImageRoutes/PhoneImage';
 import {DinnerImage_urls} from '../components/ImageRoutes/DinnerImage';
+import {WalkingImage_urls} from '../components/ImageRoutes/WalkingImage';
 import {PlayingBallsImage_urls} from '../components/ImageRoutes/PlayingBallsImage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
@@ -59,8 +60,8 @@ export default function History({navigation}) {
       image = ReadingImage_urls[item.image_url];
     } else if (item.goal_name === 'Playing balls') {
       image = PlayingBallsImage_urls[item.image_url];
-    } else if (item.goal_name === 'Having dinner') {
-      image = DinnerImage_urls[item.image_url];
+    } else if (item.goal_name === 'Walking') {
+      image = WalkingImage_urls[item.image_url];
     } else if (item.goal_name === 'Phone a friend') {
       image = PhoneImage_urls[item.image_url];
     } else if (item.goal_name === 'Listening music') {
@@ -117,11 +118,11 @@ export default function History({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.allImagesText}>
-        <Button
-          title="View all images"
-          onPress={() => navigation.navigate('Images')}
-          color="#92C2DD"
-        />
+        <TouchableOpacity
+          style={[{backgroundColor: '#92C2DD'}, styles.button]}
+          onPress={() => navigation.navigate('Images')}>
+          <Text style={styles.button_text}>View All Images</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={flatListItems}
@@ -170,5 +171,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'black',
     letterSpacing: 2,
+  },
+  button: {
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 10,
+  },
+  button_text: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
   },
 });

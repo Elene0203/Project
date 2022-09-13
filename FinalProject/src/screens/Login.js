@@ -33,8 +33,6 @@ export default function Login({navigation}) {
           const len = results.rows.length;
           if (len > 0) {
             storage.user = results.rows.item(0);
-            // console.log('uuuu', results.rows.length);
-            // console.log('uuuu2222', storage.user);
             setEmail('');
             setPassword('');
             navigation.navigate('Home');

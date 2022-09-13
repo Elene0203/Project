@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -63,41 +64,43 @@ export default function SignUp({navigation}) {
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.back}
-        onPress={() => navigation.navigate('Login')}>
-        <MaterialIcons name="arrow-back" size={36} />
-      </TouchableOpacity>
-      <Text style={styles.title}>Create Your Account</Text>
+      <ScrollView>
+        <TouchableOpacity
+          style={styles.back}
+          onPress={() => navigation.navigate('Login')}>
+          <MaterialIcons name="arrow-back" size={36} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Create Your Account</Text>
 
-      <Text style={styles.text}>Email:</Text>
-      <TextInput
-        placeholder="Your email address"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-      />
-      <Text style={styles.text}>Password:</Text>
-      <TextInput
-        placeholder="Your password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-        style={styles.input}
-      />
-      <Text style={styles.text}>Confirm Password:</Text>
-      <TextInput
-        placeholder="Confirm your password"
-        value={RepeatPassword}
-        onChangeText={setRepeatPassword}
-        secureTextEntry={true}
-        style={styles.input}
-      />
-      <TouchableOpacity
-        style={[{backgroundColor: '#92C2DD'}, styles.button]}
-        onPress={addUser}>
-        <Text style={[{color: 'white'}, styles.button_text]}>Sign Up</Text>
-      </TouchableOpacity>
+        <Text style={styles.text}>Email:</Text>
+        <TextInput
+          placeholder="Your email address"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+        />
+        <Text style={styles.text}>Password:</Text>
+        <TextInput
+          placeholder="Your password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+          style={styles.input}
+        />
+        <Text style={styles.text}>Confirm Password:</Text>
+        <TextInput
+          placeholder="Confirm your password"
+          value={RepeatPassword}
+          onChangeText={setRepeatPassword}
+          secureTextEntry={true}
+          style={styles.input}
+        />
+        <TouchableOpacity
+          style={[{backgroundColor: '#92C2DD'}, styles.button]}
+          onPress={addUser}>
+          <Text style={[{color: 'white'}, styles.button_text]}>Sign Up</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }

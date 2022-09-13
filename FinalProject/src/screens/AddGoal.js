@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   Alert,
   ImageBackground,
+  ScrollView,
+  SafeAreaView,
+  FlatList,
 } from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 import DatePicker from 'react-native-date-picker';
@@ -93,7 +96,7 @@ export default function AddGoal({navigation}) {
               color: 'grey',
               borderBottomColor: 'black',
               borderBottomWidth: 1,
-              width: 250,
+              width: 240,
               paddingLeft: 10,
             }}>
             {time != null ? hours + ':' + minutes : 'Select time'}
@@ -115,51 +118,98 @@ export default function AddGoal({navigation}) {
       </View>
     );
   };
+
   useEffect(() => {
     GetGoalImage();
   }, []);
+
+  const shortcuts = [
+    'Outdoors Photography',
+    'Reunite with an old friend',
+    'Join a Club or Society',
+    'Discover Your musical talents',
+    'Contact/meet a relation',
+    'Running outdoors',
+    'Exercise classes',
+    'Swimming',
+    'Find a new sport',
+    'Discover your acting skills',
+    'Share reading and/or poetry',
+  ];
+
+  const listItems = shortcuts.map(item => (
+    <View style={{}}>
+      <TouchableOpacity
+        onPress={() => {
+          setName(item);
+        }}>
+        <View
+          style={{
+            backgroundColor: '#DCDCDC',
+            marginRight: 20,
+            borderRadius: 5,
+            margin: 2,
+          }}>
+          <Text style={styles.shortcuts}>{item}</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  ));
+
   return (
     <View style={styles.container}>
-      <View style={[{flexDirection: 'row'}, styles.inputs]}>
-        <View style={{flex: 0.3}}>
-          <Text style={styles.bodyText}>
-            <MaterialIcons name="drive-file-rename-outline" size={25} />
-            &ensp;Name:
-          </Text>
+      <ScrollView>
+        <View style={[{flexDirection: 'row'}, styles.inputs]}>
+          <View style={{flex: 0.2}}>
+            <Text style={styles.bodyText}>Name:</Text>
+          </View>
+          <View style={{flex: 0.8}}>
+            <TextInput
+              style={styles.inputBox}
+              placeholder="Enter name or use shortcuts"
+              value={name}
+              onChangeText={setName}
+            />
+          </View>
         </View>
-        <View style={{flex: 0.7}}>
-          <TextInput
-            style={styles.inputBox}
-            placeholder="e.g. Running"
-            value={name}
-            onChangeText={setName}
+        <Text
+          style={{
+            marginLeft: 15,
+          }}>
+          shortcuts
+        </Text>
+        <View
+          style={{
+            alignSelf: 'center',
+            marginLeft: 15,
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}>
+          {listItems}
+        </View>
+
+        <View style={[{flexDirection: 'row'}, styles.inputs]}>
+          <View style={{flex: 0.2}}>
+            <Text style={styles.bodyText}>Time:</Text>
+          </View>
+          <View style={{flex: 0.8}}>
+            <TimePick />
+          </View>
+        </View>
+        <ImageBackground style={styles.image} source={GoalImage}>
+          <MaterialIcons
+            name="lock"
+            color="black"
+            size={80}
+            style={{alignSelf: 'center', marginTop: 40}}
           />
-        </View>
-      </View>
-      <View style={[{flexDirection: 'row'}, styles.inputs]}>
-        <View style={{flex: 0.3}}>
-          <Text style={styles.bodyText}>
-            <MaterialIcons name="timer" size={25} />
-            &ensp;Time:
-          </Text>
-        </View>
-        <View style={{flex: 0.7}}>
-          <TimePick />
-        </View>
-      </View>
-      <ImageBackground style={styles.image} source={GoalImage}>
-        <MaterialIcons
-          name="lock"
-          color="black"
-          size={80}
-          style={{alignSelf: 'center', marginTop: 40}}
-        />
-      </ImageBackground>
-      <TouchableOpacity
-        style={[{backgroundColor: '#92C2DD'}, styles.button]}
-        onPress={SaveGoal}>
-        <Text style={[{color: 'white'}, styles.button_text]}>Save</Text>
-      </TouchableOpacity>
+        </ImageBackground>
+        <TouchableOpacity
+          style={[{backgroundColor: '#92C2DD'}, styles.button]}
+          onPress={SaveGoal}>
+          <Text style={[{color: 'white'}, styles.button_text]}>Save</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
@@ -183,12 +233,14 @@ const styles = StyleSheet.create({
   bodyText: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: 'black',
+    marginLeft: 5,
   },
   inputBox: {
     borderBottomColor: 'black',
     borderBottomWidth: 1,
     padding: 0,
-    width: 250,
+    width: 240,
     fontSize: 16,
     paddingLeft: 10,
   },
@@ -210,5 +262,9 @@ const styles = StyleSheet.create({
   button_text: {
     fontSize: 22,
     fontWeight: 'bold',
+  },
+  shortcuts: {
+    fontSize: 11,
+    margin: 3,
   },
 });

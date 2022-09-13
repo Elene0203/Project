@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   Image,
   FlatList,
   ImageBackground,
@@ -18,11 +17,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
 import {ReadingImage_urls} from '../components/ImageRoutes/ReadingImage';
 import {CustomizedImage_urls} from '../components/ImageRoutes/CustomizedImage';
-import {DinnerImage_urls} from '../components/ImageRoutes/DinnerImage';
+import {EncourageWords} from '../components/EncourageWords';
 import {RunningImage_urls} from '../components/ImageRoutes/RunningImage';
 import {PlayingBallsImage_urls} from '../components/ImageRoutes/PlayingBallsImage';
 import {PhoneImage_urls} from '../components/ImageRoutes/PhoneImage';
 import {ListenMusicImage_urls} from '../components/ImageRoutes/ListeningMusicImage';
+import {WalkingImage_urls} from '../components/ImageRoutes/WalkingImage';
 
 // Connection to access the pre-populated user_db.db
 const db = openDatabase({name: 'appData.db', createFromLocation: 1});
@@ -35,6 +35,7 @@ export default function Home({navigation}) {
   let [flatListItems, setFlatListItems] = useState([]);
   const [encouragement, setEncouragement] = useState('');
   const [encourageImage, setEncourageImage] = useState('');
+  const [encourage, setEncourage] = useState('');
 
   const date = TodayDate();
   const alerted = {};
@@ -94,15 +95,16 @@ export default function Home({navigation}) {
               let item = results.rows.item(i);
               const time = date + ' ' + item.estimate_time;
               let seconds = new Date(time).getTime() - new Date().getTime();
+              let count = 0;
               if (
                 !alerted[item.id] &&
                 seconds < 30 * 60 * 1000 &&
-                seconds > 29 * 60 * 1000
+                seconds > 29 * 60 * 1000 &&
+                count === 0
               ) {
-                console.log(seconds);
                 Alert.alert(
                   'Notification',
-                  'The goal' +
+                  'The goal ' +
                     item.goal_name +
                     ' need to be finished 30min later',
                   [
@@ -114,6 +116,7 @@ export default function Home({navigation}) {
                   {cancelable: false},
                 );
                 alerted[item.id] = true;
+                count = 1;
               }
             }
           },
@@ -177,8 +180,8 @@ export default function Home({navigation}) {
       image = ReadingImage_urls[item.image_url];
     } else if (item.goal_name === 'Playing balls') {
       image = PlayingBallsImage_urls[item.image_url];
-    } else if (item.goal_name === 'Having dinner') {
-      image = DinnerImage_urls[item.image_url];
+    } else if (item.goal_name === 'Walking') {
+      image = WalkingImage_urls[item.image_url];
     } else if (item.goal_name === 'Phone a friend') {
       image = PhoneImage_urls[item.image_url];
     } else if (item.goal_name === 'Listening music') {
@@ -189,7 +192,7 @@ export default function Home({navigation}) {
     return (
       <View
         key={item.default_id}
-        style={{width: 120, alignItems: 'center', marginTop: 30}}>
+        style={{width: 108, alignItems: 'center', marginTop: 30}}>
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('Goal', {
@@ -235,8 +238,10 @@ export default function Home({navigation}) {
         // console.log(responseJson);
       })
       .catch(error => {
-        console.error('failed==', error);
+        // console.error('failed==', error);
       });
+    const num = parseInt(Math.random() * 30);
+    setEncourage(EncourageWords[num].content);
   };
   const EncourageImage = () => {
     const num = parseInt(Math.random() * 43);
@@ -264,7 +269,7 @@ export default function Home({navigation}) {
         </View>
         <View style={{flex: 0.5}}>
           {/*<Text style={styles.encouragement_text}>{GetEncouragement()}</Text>*/}
-          <Text style={styles.encouragement_text}>{encouragement}</Text>
+          <Text style={styles.encouragement_text}>{encourage}</Text>
         </View>
       </View>
       <View style={[{flexDirection: 'row'}, styles.dailyGoals]}>
@@ -272,11 +277,11 @@ export default function Home({navigation}) {
           <Text style={styles.DailyGoalsText}>Daily Goals</Text>
         </View>
         <View style={{flex: 0.4}}>
-          <Button
-            title="+ Add Goal"
+          <TouchableOpacity
             onPress={() => navigation.navigate('Add Goal')}
-            color="#92C2DD"
-          />
+            style={[{backgroundColor: '#92C2DD'}, styles.button]}>
+            <Text style={styles.button_text}>+ Add Goal</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -307,7 +312,7 @@ const styles = StyleSheet.create({
   encouragement: {
     flex: 0.25,
     marginTop: 10,
-    width: '90%',
+    width: '98%',
   },
   goals: {
     flex: 0.6,
@@ -351,13 +356,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   goal_image: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     opacity: 0.8,
     alignSelf: 'center',
   },
   encouragement_text: {
     marginTop: 20,
     fontSize: 16,
+  },
+  button: {
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 10,
+  },
+  button_text: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
   },
 });

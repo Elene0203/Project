@@ -2,16 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
-  FlatList,
-  Image,
   Modal,
   ImageBackground,
   Button,
   TouchableOpacity,
   Dimensions,
-  Platform,
   PermissionsAndroid,
-  Alert,
   ScrollView,
 } from 'react-native';
 
@@ -27,7 +23,6 @@ import {CustomizedImage_urls} from '../components/ImageRoutes/CustomizedImage';
 import ImageViewer from 'react-native-image-zoom-viewer';
 // Connection to access the pre-populated user_db.db
 const db = openDatabase({name: 'appData.db', createFromLocation: 1});
-import RNFS from 'react-native-fs';
 
 export default function Images({navigation}) {
   const user = storage.user;
@@ -35,7 +30,7 @@ export default function Images({navigation}) {
   let [imageUrls, setImageUrls] = useState([]);
   let [previewImage, setPreviewImage] = useState(null);
   const {width, height} = Dimensions.get('window');
-
+  console.log(width);
   useEffect(() => {
     viewAllImages();
   }, []);
@@ -46,8 +41,8 @@ export default function Images({navigation}) {
       //   'SELECT image_url, goal_name FROM goals WHERE goal_status=? and user_id=?',
       //   [1, user.user_id],
       tx.executeSql(
-        'SELECT image_url, goal_name FROM goals WHERE goal_status=?',
-        [1],
+        'SELECT image_url, goal_name FROM goals WHERE goal_status=? AND user_id =?',
+        [1, user.user_id],
         (tx, results) => {
           const temp = [];
           let image;
