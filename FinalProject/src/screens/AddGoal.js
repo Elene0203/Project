@@ -8,8 +8,6 @@ import {
   Alert,
   ImageBackground,
   ScrollView,
-  SafeAreaView,
-  FlatList,
 } from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 import DatePicker from 'react-native-date-picker';
@@ -62,8 +60,6 @@ export default function AddGoal({navigation}) {
         'INSERT INTO goals (goal_name, goal_date, estimate_time, goal_status,image_url,user_id) VALUES (?,?,?,?,?,?)',
         [name, date, hours + ':' + minutes, 0, GoalImageUrl, user.user_id],
         (tx, results) => {
-          console.log('Results', results.rowsAffected);
-          console.log('added');
           if (results.rowsAffected > 0) {
             Alert.alert(
               'Success',
@@ -172,14 +168,9 @@ export default function AddGoal({navigation}) {
             />
           </View>
         </View>
-        <Text
-          style={{
-            marginLeft: 15,
-          }}>
-          shortcuts
-        </Text>
         <View
           style={{
+            marginTop: 5,
             alignSelf: 'center',
             marginLeft: 15,
             flexDirection: 'row',

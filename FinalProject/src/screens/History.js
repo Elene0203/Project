@@ -1,9 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  Button,
   TouchableOpacity,
   FlatList,
   Image,
@@ -15,7 +14,6 @@ import {ReadingImage_urls} from '../components/ImageRoutes/ReadingImage';
 import {ListenMusicImage_urls} from '../components/ImageRoutes/ListeningMusicImage';
 import {CustomizedImage_urls} from '../components/ImageRoutes/CustomizedImage';
 import {PhoneImage_urls} from '../components/ImageRoutes/PhoneImage';
-import {DinnerImage_urls} from '../components/ImageRoutes/DinnerImage';
 import {WalkingImage_urls} from '../components/ImageRoutes/WalkingImage';
 import {PlayingBallsImage_urls} from '../components/ImageRoutes/PlayingBallsImage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

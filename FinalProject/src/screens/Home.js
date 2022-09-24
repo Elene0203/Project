@@ -139,7 +139,6 @@ export default function Home({navigation}) {
         [date, user.user_id],
         (tx, results) => {
           const len = results.rows.length;
-          console.log('goals.length===', len);
           if (len > 0) {
             console.log('Default goals already added');
             viewAllGoals();
@@ -192,7 +191,7 @@ export default function Home({navigation}) {
     return (
       <View
         key={item.default_id}
-        style={{width: 108, alignItems: 'center', marginTop: 30}}>
+        style={{width: 110, alignItems: 'center', marginTop: 30}}>
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('Goal', {
@@ -321,6 +320,7 @@ const styles = StyleSheet.create({
     width: '90%',
     borderRadius: 10,
     alignSelf: 'center',
+    alignItems: 'center',
   },
   goalsCompletionText: {
     fontSize: 20,

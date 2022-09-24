@@ -41,8 +41,6 @@ export default function SignUp({navigation}) {
         'INSERT INTO user (email, password) VALUES (?,?)',
         [email, password],
         (tx, results) => {
-          console.log('Results', results.rowsAffected);
-          console.log(email + ' ' + password + ' added');
           if (results.rowsAffected > 0) {
             Alert.alert(
               'Success',
